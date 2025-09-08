@@ -1,103 +1,52 @@
 {
-    "compatibilities": [
-        "EC2",
-        "FARGATE"
-    ],
-    "containerDefinitions": [
+  "family": "ts-neon",
+  "networkMode": "awsvpc",
+  "cpu": "1024",
+  "memory": "3072",
+  "executionRoleArn": "arn:aws:iam::795107969228:role/ecsTaskExecutionRole",
+  "requiresCompatibilities": ["FARGATE"],
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "containerDefinitions": [
+    {
+      "name": "ts-neon-container",
+      "image": "795107969228.dkr.ecr.ap-southeast-2.amazonaws.com/ts-neon:latest",
+      "cpu": 0,
+      "essential": true,
+      "memory": 512,
+      "portMappings": [
         {
-            "cpu": 0,
-            "environment": [
-                {
-                    "name": "DATAVASE_URL",
-                    "value": "postgresql://neondb_owner:npg_76iIudahLYFG@ep-jolly-shape-a7xkm3dt-pooler.ap-southeast-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
-                }
-            ],
-            "essential": true,
-            "healthCheck": {
-                "command": [
-                    "CMD-SHELL",
-                    "curl -f http://localhost:8000/health || exit 1"
-                ],
-                "interval": 30,
-                "retries": 3,
-                "timeout": 5
-            },
-            "image": "795107969228.dkr.ecr.ap-southeast-2.amazonaws.com/ts-neon:latest",
-            "logConfiguration": {
-                "logDriver": "awslogs",
-                "options": {
-                    "awslogs-group": "/ecs/ts-neon",
-                    "awslogs-create-group": "true",
-                    "awslogs-region": "ap-southeast-2",
-                    "awslogs-stream-prefix": "ecs"
-                }
-            },
-            "mountPoints": [],
-            "name": "ts-neon-container",
-            "portMappings": [
-                {
-                    "appProtocol": "http",
-                    "containerPort": 8000,
-                    "hostPort": 8000,
-                    "name": "ts-neon-container-8000-tcp",
-                    "protocol": "tcp"
-                }
-            ],
-            "systemControls": [],
-            "volumesFrom": []
+          "containerPort": 8000,
+          "hostPort": 8000,
+          "protocol": "tcp"
         }
-    ],
-    "cpu": "1024",
-    "enableFaultInjection": false,
-    "executionRoleArn": "arn:aws:iam::795107969228:role/ecsTaskExecutionRole",
-    "family": "ts-neon",
-    "memory": "3072",
-    "networkMode": "awsvpc",
-    "placementConstraints": [],
-    "registeredAt": "2025-09-08T14:08:37.093Z",
-    "registeredBy": "arn:aws:iam::795107969228:root",
-    "requiresAttributes": [
+      ],
+      "environment": [
         {
-            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.24"
-        },
-        {
-            "name": "ecs.capability.execution-role-awslogs"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.ecr-auth"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
-        },
-        {
-            "name": "ecs.capability.container-health-check"
-        },
-        {
-            "name": "ecs.capability.execution-role-ecr-pull"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
-        },
-        {
-            "name": "ecs.capability.task-eni"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+          "name": "DATAVASE_URL",
+          "value": "postgresql://neondb_owner:npg_76iIudahLYFG@ep-jolly-shape-a7xkm3dt-pooler.ap-southeast-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
         }
-    ],
-    "requiresCompatibilities": [
-        "FARGATE"
-    ],
-    "revision": 6,
-    "runtimePlatform": {
-        "cpuArchitecture": "X86_64",
-        "operatingSystemFamily": "LINUX"
-    },
-    "status": "ACTIVE",
-    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-2:795107969228:task-definition/ts-neon:6",
-    "volumes": [],
-    "tags": []
+      ],
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost:8000/health || exit 1"
+        ],
+        "interval": 30,
+        "retries": 3,
+        "timeout": 5
+      },
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/ts-neon",
+          "awslogs-region": "ap-southeast-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ],
+  "volumes": []
 }
