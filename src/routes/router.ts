@@ -3,7 +3,7 @@ import sequelize from "../db";
 
 const router = Router();
 
-router.get("/", (req, res) => res.json({ message: "Hello from Docker v3 🎉" }));
+router.get("/", (req, res) => res.json({ message: "checking github action ecs" }));
 
 router.get("/users", async (req, res) => {
   try {
