@@ -1,5 +1,6 @@
 import { Router } from "express";
 import sequelize from "../db";
+import redisClient from "../redis";
 
 const router = Router();
 
@@ -7,7 +8,12 @@ router.get("/", (req, res) => res.json({ message: "checking github action ecs" }
 
 router.get("/users", async (req, res) => {
   try {
+    const cached = await redisClient.get("users");
+    if (cached) {
+      return res.json(JSON.parse(cached));
+    }
     const users = await sequelize.models.User.findAll();
+    await redisClient.set("users", JSON.stringify(users), "EX", 120); 
     res.json(users);
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -18,6 +24,7 @@ router.get("/users", async (req, res) => {
 router.post("/users", async (req, res) => {
   try {
     const user = await sequelize.models.User.create(req.body);
+    await redisClient.del("users");
     res.status(201).json(user);
   } catch (error) {
     console.error("Error creating user:", error);
