@@ -47,7 +47,8 @@
         "options": {
           "awslogs-group": "/ecs/ts-neon",
           "awslogs-region": "ap-southeast-2",
-          "awslogs-stream-prefix": "ecs"
+          "awslogs-stream-prefix": "ecs",
+          "awslogs-create-group": "true"
         }
       }
     },
